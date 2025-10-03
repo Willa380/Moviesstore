@@ -1,13 +1,32 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Movie, Review
+from .models import Movie, Review, HiddenMovie
 from django.contrib.auth.decorators import login_required
 
 def index(request):
     search_term = request.GET.get('search')
+    
     if search_term:
         movies = Movie.objects.filter(name__icontains=search_term)
     else:
         movies = Movie.objects.all()
+
+    template_data = {}
+    template_data['title'] = 'Movies'
+    template_data['movies'] = movies
+    return render(request, 'movies/index.html', {'template_data': template_data})
+
+
+@login_required
+def login_index(request):
+    search_term = request.GET.get('search')
+    
+    hidden_movies = HiddenMovie.objects.filter(user=request.user).values_list('movie_id', flat=True)
+    movies = Movie.objects.exclude(id__in=hidden_movies)
+    
+    if search_term:
+        movies = movies.filter(name__icontains=search_term)
+    # else:
+    #     movies = Movie.objects.all()
 
     template_data = {}
     template_data['title'] = 'Movies'
@@ -61,3 +80,31 @@ def delete_review(request, id, review_id):
     review = get_object_or_404(Review, id=review_id, user=request.user)
     review.delete()
     return redirect('movies.show', id=id)
+
+@login_required
+def hide_movie(request, movie_id):
+    movie = get_object_or_404(Movie, id=movie_id)
+    
+    # 检查是否已经隐藏
+    if not HiddenMovie.objects.filter(user=request.user, movie=movie).exists():
+        HiddenMovie.objects.create(user=request.user, movie=movie)
+    
+    return redirect('movies.login_index')
+
+@login_required
+def hidden_movies_list(request):
+    hidden_movies = HiddenMovie.objects.filter(user=request.user).values_list('movie_id', flat=True)
+    movies = Movie.objects.filter(id__in=hidden_movies)
+
+    template_data = {}
+    template_data['title'] = 'Movies'
+    template_data['movies'] = movies
+    return render(request, 'movies/hidden_movies.html', {'template_data': template_data})
+
+
+@login_required
+def unhide_movie(request, movie_id):
+    movie = get_object_or_404(Movie, id=movie_id)
+    HiddenMovie.objects.filter(user=request.user, movie=movie).delete()
+    
+    return redirect('movies.hidden_movies_list')

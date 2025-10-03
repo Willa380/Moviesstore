@@ -33,6 +33,10 @@
             <a href="{% url 'movies.show' id=movie.id %}" class="btn bg-dark text-white">
               {{ movie.name }}
             </a>
+            <form method="POST" action="{% url 'movies.hide_movie' movie.id %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger mt-2">Hide</button>
+            </form>
           </div>
         </div>
       </div>

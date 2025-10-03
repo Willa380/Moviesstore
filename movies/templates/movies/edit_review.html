@@ -6,16 +6,16 @@
       <div class="col mx-auto mb-3">
         <h2>Edit Review</h2>
         <hr />
-        <form method="POST">
-          {% csrf_token %}
+        <form method="POST"> {# 开始表单: 创建一个POST表单，用于提交用户的编辑评论请求 #}
+          {% csrf_token %} {# CSRF Token: 添加Django的CSRF保护，确保表单安全性，防止跨站请求伪造 #}
           <p>
             <label for="comment">Comment:</label>
             <textarea name="comment" required class="form-control" id="comment">{{ template_data.review.comment }}</textarea>
-          </p>
+          </p> {# 创建一个文本区域，默认值: 使用{{ template_data.review.comment }}填充文本区域 #}
           <div class="text-start">
             <button type="submit" class="btn bg-dark text-white">
               Edit Review
-            </button>
+            </button> {# 创建一个按钮，用户点击后提交表单以保存编辑后的评论 #}
           </div>
         </form>
       </div>
