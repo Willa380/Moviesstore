@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+  <h1>Create a Petition</h1>
+  <form method="post" novalidate>
+    {% csrf_token %}
+    <div class="mb-3">
+      {{ form.movie_name.label_tag }}
+      {{ form.movie_name }}
+      {% for err in form.movie_name.errors %}
+      <div class="text-danger">{{ err }}</div>
+      {% endfor %}
+    </div>
+    <div class="mb-3">
+      {{ form.movie_description.label_tag }}
+      {{ form.movie_description }}
+      {% for err in form.movie_description.errors %}
+      <div class="text-danger">{{ err }}</div>
+      {% endfor %}
+    </div>
+    <div class="mb-3">
+      {{ form.reason.label_tag }}
+      {{ form.reason }}
+      {% for err in form.reason.errors %}
+      <div class="text-danger">{{ err }}</div>
+      {% endfor %}
+    </div>
+    <button class="btn btn-primary" type="submit">Submit Petition</button>
+    <a class="btn btn-secondary" href="{% url 'petition:list' %}">Cancel</a>
+  </form>
+</div>
+{% endblock content %}

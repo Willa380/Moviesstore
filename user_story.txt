@@ -1,0 +1,10 @@
+User story: As a user, I'd like to post a "include movie petition" (on a separate page) in the movie store 
+so that all users can vote on whether they want to see the admin add a certain movie to the catalog.
+
+Completion steps: 
+1. Log in or register an account.
+2. Navigate to the Petition's page (or whatever you have named this separate page).
+3. Create a new petition. 
+4. Log out and log in/register into a second account.
+5. Access the Petition's page and vote affirmatively on the previously made petition.
+6. Log in/register into another account and verify that the petition affirmative vote was recorded --> the 'yes' count increased.
